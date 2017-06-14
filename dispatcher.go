@@ -14,6 +14,59 @@
 
 package main
 
-func enforce(tenant string, sub string, obj string, act string) bool {
-	return true
+import "github.com/casbin/casbin"
+
+var base_dir string = "J:/github_repos/patron_rest/etc/patron/custom_policy/"
+var policy_global_enable string = base_dir + "../enable.json"
+var policy_global_restrict string = base_dir + "../policy.json"
+var policy_tenant1_custom string = base_dir + "tenant1/custom-policy.json"
+var policy_tenant2_custom string = base_dir + "tenant2/default-policy.json"
+
+func enforceForFile(path string, sc SecurityContext) bool {
+	e := casbin.NewEnforcer("authz_model.conf", path)
+	return e.Enforce(sc.Tenant, sc.Sub, sc.Obj, sc.Act)
+}
+
+func enforce(sc SecurityContext) bool {
+	if sc.Tenant == "admin" {
+		return true
+	}
+
+	if sc.Tenant == "tenant1" {
+		if !enforceForFile(policy_global_restrict, sc) {
+			return false
+		}
+
+		if enforceForFile(policy_global_enable, sc) {
+			return true
+		}
+
+		return enforceForFile(policy_tenant1_custom, sc)
+	}
+
+	if sc.Tenant == "tenant2" {
+		if !enforceForFile(policy_global_restrict, sc) {
+			return false
+		}
+
+		if enforceForFile(policy_global_enable, sc) {
+			return true
+		}
+
+		return enforceForFile(policy_tenant2_custom, sc)
+	}
+
+	if sc.Tenant == "tenant3" {
+		if !enforceForFile(policy_global_restrict, sc) {
+			return false
+		}
+
+		if enforceForFile(policy_global_enable, sc) {
+			return true
+		}
+
+		return false
+	}
+
+	return false
 }

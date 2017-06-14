@@ -14,49 +14,20 @@
 
 package main
 
-import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"strconv"
+import "testing"
 
-	"github.com/gin-gonic/gin"
-)
-
-type SecurityContext struct {
-	Tenant string
-	Sub string
-	Obj string
-	Act string
-}
-
-
-
-func handleRequest(c *gin.Context) {
-	r := c.Request
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		panic(err)
-	}
-
+func testEnforce(t *testing.T, tenant string, sub string, obj string, act string, res bool) {
 	var sc SecurityContext
-	err = json.Unmarshal(body, &sc)
-	if err != nil {
-		panic(err)
+	sc.Tenant = tenant
+	sc.Sub = sub
+	sc.Obj = obj
+	sc.Act = act
+
+	if enforce(sc) != res {
+		t.Errorf("%s, %s, %s, %s: %t, supposed to be %t", tenant, sub, obj, act, !res, res)
 	}
-
-	res := enforce(sc)
-	fmt.Println("Request: ", sc, " ---> ", res)
-
-	res_str := strconv.FormatBool(res)
-	c.JSON(200, gin.H{
-		"decision": res_str,
-	})
 }
 
-func main() {
-	r := gin.Default()
-	r.POST("/decision", handleRequest)
-	r.Run() // listen and serve on 0.0.0.0:8080
+func TestModel(t *testing.T) {
+	testEnforce(t, "tenant1", "alice", "data1", "read", false)
 }
