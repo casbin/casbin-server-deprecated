@@ -14,13 +14,31 @@
 
 package main
 
-import "github.com/casbin/casbin"
+import (
+	"runtime"
 
-var base_dir string = "J:/github_repos/patron_rest/etc/patron/custom_policy/"
-var policy_global_enable string = base_dir + "../enable.json"
-var policy_global_restrict string = base_dir + "../policy.json"
-var policy_tenant1_custom string = base_dir + "tenant1/custom-policy.json"
-var policy_tenant2_custom string = base_dir + "tenant2/default-policy.json"
+	"github.com/casbin/casbin"
+)
+
+var base_dir string
+
+var policy_global_enable string
+var policy_global_restrict string
+var policy_tenant1_custom string
+var policy_tenant2_custom string
+
+func init() {
+	if runtime.GOOS == "windows" {
+		base_dir = "J:/github_repos/patron_rest/etc/patron/custom_policy/"
+	} else {
+		base_dir = "/etc/patron/custom_policy/"
+	}
+
+	policy_global_enable = base_dir + "../enable.json"
+	policy_global_restrict = base_dir + "../policy.json"
+	policy_tenant1_custom = base_dir + "tenant1/custom-policy.json"
+	policy_tenant2_custom = base_dir + "tenant2/default-policy.json"
+}
 
 func enforceForFile(path string, sc SecurityContext) bool {
 	e := casbin.NewEnforcer("authz_model.conf", path)
