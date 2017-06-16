@@ -87,3 +87,22 @@ func TestRestrict(t *testing.T) {
 	testEnforce(t, e,"tenant2", "user2", "/tenant1/volumes/detail", "GET", "cinder", false)
 	testEnforce(t, e,"tenant3", "user3", "/tenant1/volumes/detail", "GET", "cinder", false)
 }
+
+func TestTenant1(t *testing.T) {
+	e := casbin.NewEnforcer(model_custom, policy_tenant1_custom)
+
+	testEnforce(t, e,"tenant1", "user11", "/tenant1/servers/detail", "GET", "nova", true)
+	testEnforce(t, e,"tenant1", "user11", "/v2/images", "GET", "glance", true)
+	testEnforce(t, e,"tenant1", "user11", "/networks.json", "GET", "neutron", true)
+	testEnforce(t, e,"tenant1", "user11", "/tenant1/volumes/detail", "GET", "cinder", true)
+
+	testEnforce(t, e,"tenant1", "user12", "/tenant1/servers/detail", "GET", "nova", true)
+	testEnforce(t, e,"tenant1", "user12", "/v2/images", "GET", "glance", false)
+	testEnforce(t, e,"tenant1", "user12", "/networks.json", "GET", "neutron", false)
+	testEnforce(t, e,"tenant1", "user12", "/tenant1/volumes/detail", "GET", "cinder", false)
+
+	testEnforce(t, e,"tenant1", "user13", "/tenant1/servers/detail", "GET", "nova", false)
+	testEnforce(t, e,"tenant1", "user13", "/v2/images", "GET", "glance", true)
+	testEnforce(t, e,"tenant1", "user13", "/networks.json", "GET", "neutron", false)
+	testEnforce(t, e,"tenant1", "user13", "/tenant1/volumes/detail", "GET", "cinder", false)
+}
