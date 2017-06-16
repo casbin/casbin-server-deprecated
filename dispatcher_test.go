@@ -26,6 +26,7 @@ func testGlobalEnforce(t *testing.T, tenant string, sub string, obj string, act 
 	sc.Sub = sub
 	sc.Obj = obj
 	sc.Act = act
+	sc.Service = service
 
 	if enforce(sc) != res {
 		t.Errorf("%s, %s, %s, %s, %s: %t, supposed to be %t", tenant, sub, obj, act, service, !res, res)
@@ -86,6 +87,10 @@ func TestRestrict(t *testing.T) {
 
 	testEnforce(t, e,"tenant2", "user2", "/tenant1/volumes/detail", "GET", "cinder", false)
 	testEnforce(t, e,"tenant3", "user3", "/tenant1/volumes/detail", "GET", "cinder", false)
+
+	testEnforce(t, e, "tenant1", "user11", "/admin/servers/detail", "GET", "nova", false)
+	testEnforce(t, e, "tenant2", "user2", "/admin/servers/detail", "GET", "nova", false)
+	testEnforce(t, e, "tenant3", "user3", "/admin/servers/detail", "GET", "nova", false)
 }
 
 func TestTenant1(t *testing.T) {
