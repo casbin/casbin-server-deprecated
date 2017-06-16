@@ -73,3 +73,17 @@ func TestEnable(t *testing.T) {
 	testEnforce(t, e, "tenant2", "user11", "/policy", "GET", "patron", false)
 	testEnforce(t, e, "tenant2", "user11", "/policy", "POST", "patron", false)
 }
+
+func TestRestrict(t *testing.T) {
+	e := casbin.NewEnforcer("restrict_model.conf", policy_global_restrict)
+
+	testEnforce(t, e,"tenant1", "user11", "/tenant1/servers/detail", "GET", "nova", true)
+	testEnforce(t, e,"tenant1", "user12", "/tenant1/servers/detail", "GET", "nova", true)
+	testEnforce(t, e,"tenant1", "user13", "/tenant1/servers/detail", "GET", "nova", true)
+
+	testEnforce(t, e,"tenant2", "user2", "/tenant1/servers/detail", "GET", "nova", false)
+	testEnforce(t, e,"tenant3", "user3", "/tenant1/servers/detail", "GET", "nova", false)
+
+	testEnforce(t, e,"tenant2", "user2", "/tenant1/volumes/detail", "GET", "cinder", false)
+	testEnforce(t, e,"tenant3", "user3", "/tenant1/volumes/detail", "GET", "cinder", false)
+}
