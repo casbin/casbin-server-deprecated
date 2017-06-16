@@ -25,8 +25,6 @@ var base_dir string
 var policy_global_enable string
 var policy_global_restrict string
 var policy_tenant1_custom string
-var policy_tenant2_custom string
-
 func init() {
 	if runtime.GOOS == "windows" {
 		base_dir = "J:/github_repos/patron_rest/etc/patron/custom_policy/"
@@ -34,10 +32,9 @@ func init() {
 		base_dir = "/home/luoyang/patron_rest/etc/patron/custom_policy/"
 	}
 
-	policy_global_enable = base_dir + "../enable.json"
-	policy_global_restrict = base_dir + "../policy.json"
-	policy_tenant1_custom = base_dir + "tenant1/custom-policy.json"
-	policy_tenant2_custom = base_dir + "tenant2/default-policy.json"
+	policy_global_enable = base_dir + "../enable.csv"
+	policy_global_restrict = base_dir + "../restrict.csv"
+	policy_tenant1_custom = base_dir + "tenant1/custom-policy.csv"
 }
 
 func enforceForFile(path string, sc SecurityContext) bool {
@@ -71,18 +68,10 @@ func enforce(sc SecurityContext) bool {
 			return true
 		}
 
-		return enforceForFile(policy_tenant2_custom, sc)
+		return true
 	}
 
 	if sc.Tenant == "tenant3" {
-		if !enforceForFile(policy_global_restrict, sc) {
-			return false
-		}
-
-		if enforceForFile(policy_global_enable, sc) {
-			return true
-		}
-
 		return false
 	}
 
