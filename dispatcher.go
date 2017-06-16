@@ -22,9 +22,9 @@ import (
 
 var base_dir string
 
-var model_global_enable string = "enable_model.conf"
-var model_global_restrict string = "restrict_model.conf"
-var model_custom string = "custom_model.conf"
+var model_global_enable string = "model/enable_model.conf"
+var model_global_restrict string = "model/restrict_model.conf"
+var model_custom string = "model/custom_model.conf"
 
 var policy_global_enable string
 var policy_global_restrict string
