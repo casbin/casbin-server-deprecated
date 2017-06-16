@@ -28,6 +28,23 @@ func testEnforce(t *testing.T, tenant string, sub string, obj string, act string
 	}
 }
 
-func TestModel(t *testing.T) {
-	testEnforce(t, "tenant1", "alice", "data1", "read", "nova", true)
+func TestAdmin(t *testing.T) {
+	testEnforce(t, "ce9ff56f5af746de93ec30f387cd7fa8", "admin", "/", "GET", "nova", true)
+	testEnforce(t, "ce9ff56f5af746de93ec30f387cd7fa8", "admin", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", true)
+	testEnforce(t, "ce9ff56f5af746de93ec30f387cd7fa8", "admin", "/ce9ff56f5af746de93ec30f387cd7fa8/extensions", "GET", "nova", true)
+	testEnforce(t, "ce9ff56f5af746de93ec30f387cd7fa8", "admin", "/ce9ff56f5af746de93ec30f387cd7fa8/os-simple-tenant-usage/ce9ff56f5af746de93ec30f387cd7fa8", "GET", "nova", true)
+	testEnforce(t, "ce9ff56f5af746de93ec30f387cd7fa8", "admin", "/ce9ff56f5af746de93ec30f387cd7fa8/flavors/detail", "GET", "nova", true)
+	testEnforce(t, "ce9ff56f5af746de93ec30f387cd7fa8", "admin", "/ce9ff56f5af746de93ec30f387cd7fa8/extensions", "GET", "nova", true)
+
+	testEnforce(t, "tenant1", "user1", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
+	testEnforce(t, "tenant1", "user2", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
+	testEnforce(t, "tenant1", "user3", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
+
+	testEnforce(t, "tenant2", "user1", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
+	testEnforce(t, "tenant2", "user2", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
+	testEnforce(t, "tenant2", "user3", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
+
+	testEnforce(t, "tenant3", "user1", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
+	testEnforce(t, "tenant3", "user2", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
+	testEnforce(t, "tenant3", "user3", "/ce9ff56f5af746de93ec30f387cd7fa8/servers/detail", "GET", "nova", false)
 }

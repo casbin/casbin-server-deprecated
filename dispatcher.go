@@ -46,7 +46,7 @@ func enforceForFile(path string, sc SecurityContext) bool {
 }
 
 func enforce(sc SecurityContext) bool {
-	if sc.Tenant == "admin" {
+	if sc.Sub == "admin" {
 		return true
 	}
 
