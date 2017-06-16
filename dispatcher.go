@@ -31,7 +31,7 @@ func init() {
 	if runtime.GOOS == "windows" {
 		base_dir = "J:/github_repos/patron_rest/etc/patron/custom_policy/"
 	} else {
-		base_dir = "/etc/patron/custom_policy/"
+		base_dir = "/home/luoyang/patron_rest/etc/patron/custom_policy/"
 	}
 
 	policy_global_enable = base_dir + "../enable.json"
