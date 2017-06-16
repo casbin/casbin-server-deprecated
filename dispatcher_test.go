@@ -56,7 +56,7 @@ func TestAdmin(t *testing.T) {
 }
 
 func TestEnable(t *testing.T) {
-	e := casbin.NewEnforcer("authz_model.conf", policy_global_enable)
+	e := casbin.NewEnforcer(model_global_enable, policy_global_enable)
 
 	testEnforce(t, e,"tenant1", "user11", "/metadata", "GET", "patron", true)
 	testEnforce(t, e, "tenant1", "user11", "/metadata", "POST", "patron", true)
@@ -75,7 +75,7 @@ func TestEnable(t *testing.T) {
 }
 
 func TestRestrict(t *testing.T) {
-	e := casbin.NewEnforcer("restrict_model.conf", policy_global_restrict)
+	e := casbin.NewEnforcer(model_global_restrict, policy_global_restrict)
 
 	testEnforce(t, e,"tenant1", "user11", "/tenant1/servers/detail", "GET", "nova", true)
 	testEnforce(t, e,"tenant1", "user12", "/tenant1/servers/detail", "GET", "nova", true)

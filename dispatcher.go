@@ -22,9 +22,14 @@ import (
 
 var base_dir string
 
+var model_global_enable string = "enable_model.conf"
+var model_global_restrict string = "restrict_model.conf"
+var model_custom string = "custom_model.conf"
+
 var policy_global_enable string
 var policy_global_restrict string
 var policy_tenant1_custom string
+
 func init() {
 	if runtime.GOOS == "windows" {
 		base_dir = "J:/github_repos/patron_rest/etc/patron/custom_policy/"
@@ -37,8 +42,8 @@ func init() {
 	policy_tenant1_custom = base_dir + "tenant1/custom-policy.csv"
 }
 
-func enforceForFile(path string, sc SecurityContext) bool {
-	e := casbin.NewEnforcer("authz_model.conf", path)
+func enforceForFile(modelPath string, policyPath string, sc SecurityContext) bool {
+	e := casbin.NewEnforcer(modelPath, policyPath)
 	return e.Enforce(sc.Tenant, sc.Sub, sc.Obj, sc.Act, sc.Service)
 }
 
@@ -48,23 +53,23 @@ func enforce(sc SecurityContext) bool {
 	}
 
 	if sc.Tenant == "tenant1" {
-		if !enforceForFile(policy_global_restrict, sc) {
+		if !enforceForFile(model_global_restrict, policy_global_restrict, sc) {
 			return false
 		}
 
-		if enforceForFile(policy_global_enable, sc) {
+		if enforceForFile(model_global_enable, policy_global_enable, sc) {
 			return true
 		}
 
-		return enforceForFile(policy_tenant1_custom, sc)
+		return enforceForFile(model_custom, policy_tenant1_custom, sc)
 	}
 
 	if sc.Tenant == "tenant2" {
-		if !enforceForFile(policy_global_restrict, sc) {
+		if !enforceForFile(model_global_restrict, policy_global_restrict, sc) {
 			return false
 		}
 
-		if enforceForFile(policy_global_enable, sc) {
+		if enforceForFile(model_global_enable, policy_global_enable, sc) {
 			return true
 		}
 
