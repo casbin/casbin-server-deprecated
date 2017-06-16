@@ -16,7 +16,7 @@ package main
 
 import "testing"
 
-func testEnforce(t *testing.T, tenant string, sub string, obj string, act string, res bool) {
+func testEnforce(t *testing.T, tenant string, sub string, obj string, act string, service string, res bool) {
 	var sc SecurityContext
 	sc.Tenant = tenant
 	sc.Sub = sub
@@ -24,10 +24,10 @@ func testEnforce(t *testing.T, tenant string, sub string, obj string, act string
 	sc.Act = act
 
 	if enforce(sc) != res {
-		t.Errorf("%s, %s, %s, %s: %t, supposed to be %t", tenant, sub, obj, act, !res, res)
+		t.Errorf("%s, %s, %s, %s, %s: %t, supposed to be %t", tenant, sub, obj, act, service, !res, res)
 	}
 }
 
 func TestModel(t *testing.T) {
-	testEnforce(t, "tenant1", "alice", "data1", "read", false)
+	testEnforce(t, "tenant1", "alice", "data1", "read", "nova", true)
 }

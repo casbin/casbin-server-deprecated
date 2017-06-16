@@ -42,7 +42,7 @@ func init() {
 
 func enforceForFile(path string, sc SecurityContext) bool {
 	e := casbin.NewEnforcer("authz_model.conf", path)
-	return e.Enforce(sc.Tenant, sc.Sub, sc.Obj, sc.Act)
+	return e.Enforce(sc.Tenant, sc.Sub, sc.Obj, sc.Act, sc.Service)
 }
 
 func enforce(sc SecurityContext) bool {

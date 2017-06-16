@@ -28,6 +28,7 @@ type SecurityContext struct {
 	Sub string
 	Obj string
 	Act string
+	Service string
 }
 
 
