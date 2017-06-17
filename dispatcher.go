@@ -31,7 +31,25 @@ var policy_global_enable string
 var policy_global_restrict string
 var policy_tenant1_custom string
 
+func pathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
+
 func init() {
+	exists, _ := pathExists(model_global_enable)
+	if !exists {
+		model_global_enable = "/home/luoyang/gopath/src/github.com/casbin/casbin-server/model/enable_model.conf"
+		model_global_restrict = "/home/luoyang/gopath/src/github.com/casbin/casbin-server/model/restrict_model.conf"
+		model_custom = "/home/luoyang/gopath/src/github.com/casbin/casbin-server/model/custom_model.conf"
+	}
+
 	if runtime.GOOS == "windows" {
 		base_dir = "J:/github_repos/patron_rest/etc/patron/custom_policy/"
 	} else {
