@@ -18,6 +18,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -31,7 +33,7 @@ type SecurityContext struct {
 	Service string
 }
 
-
+var logger *log.Logger
 
 func handleRequest(c *gin.Context) {
 	r := c.Request
@@ -49,6 +51,7 @@ func handleRequest(c *gin.Context) {
 
 	res := enforce(sc)
 	fmt.Println("Request: ", sc, " ---> ", res)
+	logger.Print("Request: ", sc, " ---> ", res)
 
 	res_str := strconv.FormatBool(res)
 	c.JSON(200, gin.H{
@@ -57,6 +60,16 @@ func handleRequest(c *gin.Context) {
 }
 
 func main() {
+	logfile,err:=os.OpenFile("decision.log", os.O_APPEND | os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Printf("%s\n", err.Error())
+		os.Exit(-1)
+	}
+	defer logfile.Close()
+
+	logger = log.New(logfile, "", log.Ldate | log.Ltime)
+	logger.Print("Start logging..")
+
 	r := gin.Default()
 	r.POST("/decision", handleRequest)
 	r.Run(":9999") // listen and serve on 0.0.0.0:8080
