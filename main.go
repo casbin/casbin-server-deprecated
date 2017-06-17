@@ -60,7 +60,7 @@ func handleRequest(c *gin.Context) {
 }
 
 func main() {
-	logfile,err:=os.OpenFile("decision.log", os.O_APPEND | os.O_CREATE, 0666)
+	logfile,err:=os.OpenFile("decision.log", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Printf("%s\n", err.Error())
 		os.Exit(-1)
