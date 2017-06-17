@@ -8,8 +8,9 @@ go:
 before_install:
   - go get github.com/mattn/goveralls
 
+before_script:
+  - cd ..
+  - git clone https://github.com/osvt/patron_rest
+
 script:
   - $HOME/gopath/bin/goveralls -service=travis-ci
-
-services:
-  - mysql
