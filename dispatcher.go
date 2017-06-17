@@ -53,11 +53,15 @@ func enforceForFile(modelPath string, policyPath string, sc SecurityContext) boo
 }
 
 func enforce(sc SecurityContext) bool {
-	if sc.Sub == "admin" {
+	if sc.Tenant == "admin" {
 		return true
 	}
 
-	if sc.Tenant == "services" {
+	if sc.Tenant == "1" || sc.Tenant == "2" || sc.Tenant == "4" || sc.Tenant == "9" {
+		return true
+	}
+
+	if sc.Tenant == "rds" || sc.Tenant == "service" || sc.Tenant == "services" {
 		return true
 	}
 
