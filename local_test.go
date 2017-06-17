@@ -20,40 +20,10 @@ import (
 	"github.com/casbin/casbin"
 )
 
-func testGlobalEnforce(t *testing.T, tenant string, sub string, obj string, act string, service string, res bool) {
-	var sc SecurityContext
-	sc.Tenant = tenant
-	sc.Sub = sub
-	sc.Obj = obj
-	sc.Act = act
-	sc.Service = service
-
-	if enforce(sc) != res {
-		t.Errorf("%s, %s, %s, %s, %s: %t, supposed to be %t", tenant, sub, obj, act, service, !res, res)
-	}
-}
-
 func testEnforce(t *testing.T, e *casbin.Enforcer, tenant string, sub string, obj string, act string, service string, res bool) {
 	if e.Enforce(tenant, sub, obj, act, service) != res {
 		t.Errorf("%s, %s, %s, %s, %s: %t, supposed to be %t", tenant, sub, obj, act, service, !res, res)
 	}
-}
-
-func TestAdmin(t *testing.T) {
-	testGlobalEnforce(t, "admin", "admin", "/", "GET", "nova", true)
-	testGlobalEnforce(t, "admin", "admin", "/admin/servers/detail", "GET", "nova", true)
-	testGlobalEnforce(t, "admin", "admin", "/admin/extensions", "GET", "nova", true)
-	testGlobalEnforce(t, "admin", "admin", "/admin/os-simple-tenant-usage/ce9ff56f5af746de93ec30f387cd7fa8", "GET", "nova", true)
-	testGlobalEnforce(t, "admin", "admin", "/admin/flavors/detail", "GET", "nova", true)
-	testGlobalEnforce(t, "admin", "admin", "/admin/extensions", "GET", "nova", true)
-
-	testGlobalEnforce(t, "tenant1", "user11", "/admin/servers/detail", "GET", "nova", false)
-	testGlobalEnforce(t, "tenant1", "user12", "/admin/servers/detail", "GET", "nova", false)
-	testGlobalEnforce(t, "tenant1", "user13", "/admin/servers/detail", "GET", "nova", false)
-
-	testGlobalEnforce(t, "tenant2", "user2", "/admin/servers/detail", "GET", "nova", false)
-
-	testGlobalEnforce(t, "tenant3", "user3", "/admin/servers/detail", "GET", "nova", false)
 }
 
 func TestEnable(t *testing.T) {
