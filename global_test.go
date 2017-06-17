@@ -49,21 +49,30 @@ func TestGlobalAdmin(t *testing.T) {
 }
 
 func TestGlobalEnable(t *testing.T) {
-	testGlobalEnforce(t,"tenant1", "user11", "/metadata", "GET", "patron", true)
-	testGlobalEnforce(t, "tenant1", "user11", "/metadata", "POST", "patron", true)
-	testGlobalEnforce(t, "tenant1", "user11", "/policy", "GET", "patron", true)
-	testGlobalEnforce(t, "tenant1", "user11", "/policy", "POST", "patron", true)
+	testGlobalEnforce(t,"tenant1", "user11", "/tenant1/metadata", "GET", "patron", true)
+	testGlobalEnforce(t, "tenant1", "user11", "/tenant1/metadata", "POST", "patron", true)
+	testGlobalEnforce(t, "tenant1", "user11", "/tenant1/policy", "GET", "patron", true)
+	testGlobalEnforce(t, "tenant1", "user11", "/tenant1/policy", "POST", "patron", true)
 
-	testGlobalEnforce(t,"tenant1", "user12", "/metadata", "GET", "patron", false)
-	testGlobalEnforce(t, "t" +
-		"enant1", "user12", "/metadata", "POST", "patron", false)
-	testGlobalEnforce(t, "tenant1", "user12", "/policy", "GET", "patron", false)
-	testGlobalEnforce(t, "tenant1", "user12", "/policy", "POST", "patron", false)
+	testGlobalEnforce(t,"tenant1", "user12", "/tenant1/metadata", "GET", "patron", false)
+	testGlobalEnforce(t, "tenant1", "user12", "/tenant1/metadata", "POST", "patron", false)
+	testGlobalEnforce(t, "tenant1", "user12", "/tenant1/policy", "GET", "patron", false)
+	testGlobalEnforce(t, "tenant1", "user12", "/tenant1/policy", "POST", "patron", false)
 
-	testGlobalEnforce(t,"tenant2", "user11", "/metadata", "GET", "patron", false)
-	testGlobalEnforce(t, "tenant2", "user11", "/metadata", "POST", "patron", false)
-	testGlobalEnforce(t, "tenant2", "user11", "/policy", "GET", "patron", false)
-	testGlobalEnforce(t, "tenant2", "user11", "/policy", "POST", "patron", false)
+	testGlobalEnforce(t,"tenant2", "user2", "/tenant1/metadata", "GET", "patron", false)
+	testGlobalEnforce(t, "tenant2", "user2", "/tenant1/metadata", "POST", "patron", false)
+	testGlobalEnforce(t, "tenant2", "user2", "/tenant1/policy", "GET", "patron", false)
+	testGlobalEnforce(t, "tenant2", "user2", "/tenant1/policy", "POST", "patron", false)
+
+	testGlobalEnforce(t,"tenant2", "user2", "/tenant2/metadata", "GET", "patron", true)
+	testGlobalEnforce(t, "tenant2", "user2", "/tenant2/metadata", "POST", "patron", true)
+	testGlobalEnforce(t, "tenant2", "user2", "/tenant2/policy", "GET", "patron", true)
+	testGlobalEnforce(t, "tenant2", "user2", "/tenant2/policy", "POST", "patron", true)
+
+	testGlobalEnforce(t,"tenant3", "user3", "/tenant3/metadata", "GET", "patron", false)
+	testGlobalEnforce(t, "tenant3", "user3", "/tenant3/metadata", "POST", "patron", false)
+	testGlobalEnforce(t, "tenant3", "user3", "/tenant3/policy", "GET", "patron", false)
+	testGlobalEnforce(t, "tenant3", "user3", "/tenant3/policy", "POST", "patron", false)
 }
 
 func TestGlobalRestrict(t *testing.T) {

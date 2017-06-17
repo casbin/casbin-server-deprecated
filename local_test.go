@@ -29,20 +29,30 @@ func testEnforce(t *testing.T, e *casbin.Enforcer, tenant string, sub string, ob
 func TestEnable(t *testing.T) {
 	e := casbin.NewEnforcer(model_global_enable, policy_global_enable)
 
-	testEnforce(t, e,"tenant1", "user11", "/metadata", "GET", "patron", true)
-	testEnforce(t, e, "tenant1", "user11", "/metadata", "POST", "patron", true)
-	testEnforce(t, e, "tenant1", "user11", "/policy", "GET", "patron", true)
-	testEnforce(t, e, "tenant1", "user11", "/policy", "POST", "patron", true)
+	testEnforce(t, e,"tenant1", "user11", "/tenant1/metadata", "GET", "patron", true)
+	testEnforce(t, e, "tenant1", "user11", "/tenant1/metadata", "POST", "patron", true)
+	testEnforce(t, e, "tenant1", "user11", "/tenant1/policy", "GET", "patron", true)
+	testEnforce(t, e, "tenant1", "user11", "/tenant1/policy", "POST", "patron", true)
 
-	testEnforce(t, e,"tenant1", "user12", "/metadata", "GET", "patron", false)
-	testEnforce(t, e, "tenant1", "user12", "/metadata", "POST", "patron", false)
-	testEnforce(t, e, "tenant1", "user12", "/policy", "GET", "patron", false)
-	testEnforce(t, e, "tenant1", "user12", "/policy", "POST", "patron", false)
+	testEnforce(t, e,"tenant1", "user12", "/tenant1/metadata", "GET", "patron", false)
+	testEnforce(t, e, "tenant1", "user12", "/tenant1/metadata", "POST", "patron", false)
+	testEnforce(t, e, "tenant1", "user12", "/tenant1/policy", "GET", "patron", false)
+	testEnforce(t, e, "tenant1", "user12", "/tenant1/policy", "POST", "patron", false)
 
-	testEnforce(t, e,"tenant2", "user11", "/metadata", "GET", "patron", false)
-	testEnforce(t, e, "tenant2", "user11", "/metadata", "POST", "patron", false)
-	testEnforce(t, e, "tenant2", "user11", "/policy", "GET", "patron", false)
-	testEnforce(t, e, "tenant2", "user11", "/policy", "POST", "patron", false)
+	testEnforce(t, e,"tenant2", "user11", "/tenant2/metadata", "GET", "patron", false)
+	testEnforce(t, e, "tenant2", "user11", "/tenant2/metadata", "POST", "patron", false)
+	testEnforce(t, e, "tenant2", "user11", "/tenant2/policy", "GET", "patron", false)
+	testEnforce(t, e, "tenant2", "user11", "/tenant2/policy", "POST", "patron", false)
+
+	testEnforce(t, e,"tenant2", "user2", "/tenant2/metadata", "GET", "patron", true)
+	testEnforce(t, e, "tenant2", "user2", "/tenant2/metadata", "POST", "patron", true)
+	testEnforce(t, e, "tenant2", "user2", "/tenant2/policy", "GET", "patron", true)
+	testEnforce(t, e, "tenant2", "user2", "/tenant2/policy", "POST", "patron", true)
+
+	testEnforce(t, e,"tenant3", "user3", "/tenant3/metadata", "GET", "patron", true)
+	testEnforce(t, e, "tenant3", "user3", "/tenant3/metadata", "POST", "patron", true)
+	testEnforce(t, e, "tenant3", "user3", "/tenant3/policy", "GET", "patron", true)
+	testEnforce(t, e, "tenant3", "user3", "/tenant3/policy", "POST", "patron", true)
 }
 
 func TestRestrict(t *testing.T) {
