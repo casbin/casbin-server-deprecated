@@ -72,5 +72,5 @@ func main() {
 
 	r := gin.Default()
 	r.POST("/decision", handleRequest)
-	r.Run(":9999") // listen and serve on 0.0.0.0:8080
+	r.Run(":9111") // listen and serve on 0.0.0.0:8080
 }
